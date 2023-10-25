@@ -8,7 +8,7 @@ import UserPage from "./pages/UserPage/userPage.tsx";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/administrator",
     element: <AdministrationPage />,
   },
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     element: <UserPage/>,
   },
   {
-    path: "/home",
+    path: "/",
     element: <App/>,
   }
 ]);
