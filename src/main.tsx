@@ -4,12 +4,21 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import App from "./App.tsx";
 import AdministrationPage from "./pages/administrationPage.tsx";
+import UserPage from "./pages/UserPage/userPage.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <AdministrationPage />,
   },
+  {
+    path: "/user",
+    element: <UserPage/>,
+  },
+  {
+    path: "/home",
+    element: <App/>,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
