@@ -9,22 +9,28 @@ import PersonOffIcon from "@mui/icons-material/PersonOff";
 import PersonIcon from "@mui/icons-material/Person";
 import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
+import CheckIcon from "@mui/icons-material/Check";
 
-function AuthorizationList(Props: { ListType: "blacklist" | "whitelist"; data: any[] }): JSX.Element {
+function AuthorizationList(Props: { ListType: "blacklist" | "whitelist"; addressList: string[] }): JSX.Element {
   return (
     <>
       <Typography>{Props.ListType}er une adresse</Typography>
-      <TextField label="saisir une adresse" />
+      <Box sx={BoxInputStyle}>
+        <TextField label="saisir une adresse" />
+        <IconButton sx={IconButtonStyle} color="info">
+          <CheckIcon />
+        </IconButton>
+      </Box>
       <Box sx={BoxListStyle}>
         <List sx={ListStyle}>
-          {Props.data.map((item) => (
-            <ListItem key={item} sx={ItemListeStyle}>
+          {Props.addressList.map((address) => (
+            <ListItem key={address} sx={ListItemStyle}>
               {Props.ListType === "blacklist" ? (
                 <PersonOffIcon color="error" fontSize="large" />
               ) : (
                 <PersonIcon color="success" fontSize="large" />
               )}
-              <ListItemText primary={item} />
+              <ListItemText primary={address} />
               <IconButton>
                 <CancelIcon />
               </IconButton>
@@ -54,10 +60,21 @@ const BoxListStyle: SxProps = {
   boxShadow: "8px 8px #0c6aaf",
 };
 
-const ItemListeStyle: SxProps = {
+const ListItemStyle: SxProps = {
   border: "1px solid",
   borderRadius: "10px",
   marginY: "3px",
+};
+
+const BoxInputStyle: SxProps = {
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+};
+
+const IconButtonStyle: SxProps = {
+  border: "3px solid",
+  marginX: "15px",
 };
 
 export default AuthorizationList;
