@@ -64,7 +64,7 @@ const config: HardhatUserConfig = {
     ],
   },
   paths: {
-    artifacts: './voting-application/src/artifacts',
+    artifacts: './frontend/src/artifacts',
   },
 };
 export default config;
