@@ -9,16 +9,49 @@ import PersonIcon from "@mui/icons-material/Person";
 import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
 import CheckIcon from "@mui/icons-material/Check";
+import {useEffect, useState} from "react";
 
 function AuthorizationList(Props) {
+
+  const [addressToAddInBlackList, setAddressToAddInBlackList] = useState('');
+  function handleAddToBlackList(){
+    Props.contract.contract._methods.addInBlacklist(addressToAddInBlackList.toString());
+  }
+
+  async function isWhiteListed(){
+    const toto = await Props.contract.contract._methods.isWhitelisted("0xeA98f1140365367c162b05060F2541dd416abCc8").call();
+    console.log(toto);
+  }
+
+  useEffect(() => {
+    isWhiteListed();
+  },[]);
+
   return (
     <>
       <Typography>{Props.ListType}er une adresse</Typography>
       <Box sx={BoxInputStyle}>
-        <TextField label="saisir une adresse" />
-        <IconButton sx={IconButtonStyle} color="info">
+        <TextField label="saisir une adresse" onChange={(e) => setAddressToAddInBlackList(e.target.value)}/>
+        <IconButton sx={IconButtonStyle} color="info" onClick={handleAddToBlackList}>
           <CheckIcon />
         </IconButton>
+      </Box>
+      <Box sx={BoxListStyle}>
+        <List sx={ListStyle}>
+          {Props.addressList.map((address) => (
+              <ListItem key={address} sx={ListItemStyle}>
+                {Props.ListType === "blacklist" ? (
+                    <PersonOffIcon color="error" fontSize="large" />
+                ) : (
+                    <PersonIcon color="success" fontSize="large" />
+                )}
+                <ListItemText primary={address} />
+                <IconButton>
+                  <CancelIcon />
+                </IconButton>
+              </ListItem>
+          ))}
+        </List>
       </Box>
       <Box sx={BoxListStyle}>
         <List sx={ListStyle}>

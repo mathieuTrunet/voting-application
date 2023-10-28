@@ -49,6 +49,8 @@ class App extends Component {
                 })
             }
 
+            console.log(this.state);
+
         } catch (error) {
             // Catch any errors for any of the above operations.
             alert(
@@ -61,7 +63,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                {this.state.isOwner ? <AdministrationPage></AdministrationPage> : <UserPage></UserPage>}
+                {this.state.isOwner ? <AdministrationPage contract = {this.state}></AdministrationPage> : <UserPage contract = {this.state}></UserPage>}
             </div>
         );
     }
