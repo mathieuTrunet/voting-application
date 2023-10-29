@@ -18,7 +18,6 @@ const SEPOLIA_PRIVATE_KEY = "0bfc417b16472cc5730f761b4912fdb6cc623e6f14058d7da2c
 task("accounts", "Prints the list of accounts", async (args, hre) => {
   const accounts = await hre.ethers.getSigners();
   for (const account of accounts) {
-    console.log(account.address);
   }
 });
 

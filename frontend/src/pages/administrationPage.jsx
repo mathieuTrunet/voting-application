@@ -1,8 +1,10 @@
 import Box from "@mui/material/Box";
 
 import NavigationBar from "../components/navigationBar";
-import AuthorizationList from "../components/authorizationList";
+import WhiteList from "../components/whiteList.jsx";
 import QuestionManagement from "../components/questionManagement";
+import BlackList from "../components/blackList.jsx";
+import {useEffect, useState} from "react";
 
 const data = [
   "0xAC5074E64crhtrhrthrthegegergregregeae64E",
@@ -12,13 +14,12 @@ const data = [
 
 export default function AdministrationPage(props) {
 
-
   return (
     <>
       <NavigationBar />
       <Box sx={MainBoxStyle}>
-        <AuthorizationList ListType="whitelist" addressList={data} contract={props.contract}/>
-        <AuthorizationList ListType="blacklist" addressList={data} contract={props.contract}/>
+        <WhiteList addressList={data} contract={props.contract}/>
+        <BlackList addressList={data} contract={props.contract}/>
         <QuestionManagement contract={props.contract}></QuestionManagement>
       </Box>
     </>

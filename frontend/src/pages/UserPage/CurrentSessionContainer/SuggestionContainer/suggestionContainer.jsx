@@ -1,7 +1,8 @@
 import Checkbox from '@mui/material/Checkbox';
 import Button from "@mui/material/Button";
 import LinearWithValueLabel from "../../../../components/ProgressBar.jsx";
-export default function SuggestionContainer() {
+import {useState, useEffect} from "react";
+export default function SuggestionContainer(props) {
 
     const suggestions = [
         {
@@ -34,6 +35,19 @@ export default function SuggestionContainer() {
     }
 
     const currentState = WorkflowStatus.VotingSessionStarted;
+
+    const [suggestions2, setSuggestions] = useState('');
+    const [state, setState] = useState();
+
+    async function setCurrentState() {
+        // eslint-disable-next-line react/prop-types
+        const test = await props?.contract?.contract?._methods?.getState().call();
+    }
+
+    useEffect(() => {
+        // setState(props.contract._methods.getState().call);
+        setCurrentState();
+    },[]);
 
     return(
         <div>
