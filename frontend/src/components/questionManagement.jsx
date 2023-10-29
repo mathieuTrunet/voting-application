@@ -9,19 +9,26 @@ import {useEffect, useState} from "react";
 
 import PropositionList from "./propositionList";
 import Voting from "../artifacts/contracts/Voting.sol/Voting.json";
+import Results from "./results.jsx";
 
 export default function QuestionManagement(Props) {
 
     const [question, setQuestion] = useState();
-
+    const [currentQuestionState, setCurrentQuestionState] = useState();
     async function getCurrentQuestion() {
         // eslint-disable-next-line react/prop-types
         const question = await Props.contract.contract._methods.getQuestion().call();
         setQuestion(question);
     }
 
+    async function getCurrentState() {
+        const currentStateName = await Props.contract.contract._methods.getState().call();
+        setCurrentQuestionState(currentStateName);
+    }
+
     useEffect(() => {
         getCurrentQuestion();
+        getCurrentState();
     }, [])
 
     return (
@@ -29,7 +36,10 @@ export default function QuestionManagement(Props) {
             <QuestionInput contract={Props.contract}/>
             {question?.length > 0 ?
                 <>
-                    <PropositionList contract={Props.contract}/>
+                    {currentQuestionState == "etape 4 : Decouvrez les resultats" ? <Results contract={Props.contract}></Results> :
+                    <>
+                        <PropositionList contract={Props.contract}/>
+                    </>}
                     <ButtonPhaseSection contract={Props.contract}/>
                 </>
                 : <></>}
@@ -136,7 +146,6 @@ function ButtonPhaseSection(Props) {
     async function getCurrentState() {
         const currentStateName = await Props.contract.contract._methods.getState().call();
         setCurrentQuestionState(currentStateName);
-        console.log(currentStateName);
     }
 
     async function resetQuestion() {

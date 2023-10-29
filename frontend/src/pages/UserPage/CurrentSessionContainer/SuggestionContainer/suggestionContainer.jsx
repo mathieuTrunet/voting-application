@@ -42,7 +42,6 @@ export default function SuggestionContainer(props) {
     async function setCurrentState() {
         // eslint-disable-next-line react/prop-types
         const test = await props?.contract?.contract?._methods?.getState().call();
-        console.log(test);
     }
 
     useEffect(() => {
