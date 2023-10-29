@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckIcon from "@mui/icons-material/Check";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
 import PropositionList from "./propositionList";
 
@@ -13,20 +13,25 @@ const data = ["banane", "pomme", "orange", "boudin noir"];
 
 
 
-export default function QuestionManagement() {
+export default function QuestionManagement(Props) {
   const [phase, setPhase] = useState("input");
   const [isBooleanQuestion, setIsBooleanQuestion] = useState(false);
 
   return (
     <>
-      <QuestionInput phase={phase} />
+      <QuestionInput phase={phase} contract={Props.contract}/>
       <PropositionList propositionList={data} />
-      <ButtonPhaseSection phase={phase} />
+      <ButtonPhaseSection phase={phase} contract={Props.contract}/>
     </>
   );
 }
 
 function QuestionInput(Props) {
+
+    function handleWriteQuestion(){
+        Props.contract.contract._methods.writeQuestion("coucou").call();
+    }
+
   return (
     <>
       <Box sx={BoxSwitchStyle}>
@@ -38,20 +43,45 @@ function QuestionInput(Props) {
         sx={{ width: 650 }}
         label="saisir une question"
       />
+        <Button
+            sx={ButtonPhaseStyle}
+            variant="contained"
+            color={Props.phase === "input" ? "info" : "success"}
+            startIcon={Props.phase !== "input" && <CheckIcon />}
+            onClick={handleWriteQuestion}
+        >
+            validation
+        </Button>
     </>
   );
 }
 
+
+
 function ButtonPhaseSection(Props) {
+    const [currentQuestionState, setCurrentQuestionState] = useState('');
+    async function handleQuestionState() {
+        await Props.contract.contract._methods.nextState().call();
+        const toto = await Props.contract.contract._methods.getState().call();
+        console.log(toto);
+    }
+
+    useEffect(() =>{
+        handleQuestionState();
+    },[])
+
+
   return (
     <>
       <Box sx={{ marginY: "20px" }}>
+          {}
         <Button
           sx={ButtonPhaseStyle}
           variant="contained"
           color={Props.phase === "input" ? "info" : "success"}
           startIcon={Props.phase !== "input" && <CheckIcon />}
           disabled={Props.phase === "input" ? false : true}
+          onClick={handleQuestionState}
         >
           validation
         </Button>

@@ -39,8 +39,8 @@ export default function SuggestionContainer() {
         <div>
             {
                 suggestions.map((suggestion, index) =>
-                    <div key={suggestion.id}>
-                        <span>{index + 1}</span>
+                    <div key={suggestion.id} style={{display:'flex'}}>
+                        <span>{index + 1} - </span>
                         <div>
                             <div>Suggestion de : {suggestion.sender}</div>
                             {currentState == WorkflowStatus.VotingSessionStarted ? <Checkbox aria-label="suggestion-approved" checked={suggestion.approved}/> : null}

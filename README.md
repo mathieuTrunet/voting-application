@@ -11,3 +11,10 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.ts
 ```
+
+Commande pour déployer un nouveau contrat depuis la racine du projet: 
+
+```shell
+npx hardhat compile
+npx hardhat run --network sepolia Deploy/deploy.ts
+```
