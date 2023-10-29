@@ -18,3 +18,6 @@ Commande pour déployer un nouveau contrat depuis la racine du projet:
 npx hardhat compile
 npx hardhat run --network sepolia Deploy/deploy.ts
 ```
+
+Demonstration:
+<iframe width="560" height="315" src="https://youtu.be/5WQ6H-Ys890" frameborder="0" allowfullscreen></iframe>
