@@ -10,12 +10,27 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import IconButton from "@mui/material/IconButton";
 import CheckIcon from "@mui/icons-material/Check";
 import {useEffect, useState} from "react";
+import Voting from "../artifacts/contracts/Voting.sol/Voting.json";
 
 function AuthorizationList(Props) {
 
   const [addressToAddInBlackList, setAddressToAddInBlackList] = useState('');
-  function handleAddToBlackList(){
-    Props.contract.contract._methods.addInBlacklist(addressToAddInBlackList.toString());
+  async function handleAddToBlackList(){
+    const instance =  new Props.contract.web3.eth.Contract(
+        Voting.abi,
+        Props.contract.contract._address
+    );
+
+    let gasEstimate = await Props.contract.contract._methods.addInWhitelist("0xeA98f1140365367c162b05060F2541dd416abCc8").estimateGas({from : Props.contract.accounts[0]})
+
+    let encode = await Props.contract.contract._methods.addInWhitelist("0xeA98f1140365367c162b05060F2541dd416abCc8").encodeABI();
+
+    let tx = await Props.contract.web3.eth.sendTransaction({
+      from: Props.contract.accounts[0],
+      to: Props.contract.contract._address,
+      gas: gasEstimate,
+      data: encode,
+    });
   }
 
   async function isWhiteListed(){
@@ -24,6 +39,7 @@ function AuthorizationList(Props) {
   }
 
   useEffect(() => {
+    console.log(Props.contract.accounts[0]);
     isWhiteListed();
   },[]);
 
@@ -35,23 +51,6 @@ function AuthorizationList(Props) {
         <IconButton sx={IconButtonStyle} color="info" onClick={handleAddToBlackList}>
           <CheckIcon />
         </IconButton>
-      </Box>
-      <Box sx={BoxListStyle}>
-        <List sx={ListStyle}>
-          {Props.addressList.map((address) => (
-              <ListItem key={address} sx={ListItemStyle}>
-                {Props.ListType === "blacklist" ? (
-                    <PersonOffIcon color="error" fontSize="large" />
-                ) : (
-                    <PersonIcon color="success" fontSize="large" />
-                )}
-                <ListItemText primary={address} />
-                <IconButton>
-                  <CancelIcon />
-                </IconButton>
-              </ListItem>
-          ))}
-        </List>
       </Box>
       <Box sx={BoxListStyle}>
         <List sx={ListStyle}>
