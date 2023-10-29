@@ -11,8 +11,6 @@ const data = [
 ];
 
 export default function AdministrationPage(props) {
-
-
   return (
     <>
       <NavigationBar />

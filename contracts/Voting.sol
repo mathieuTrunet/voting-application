@@ -109,7 +109,7 @@ contract Voting is Ownable(msg.sender){
     }
 
     //Écrire la question (admin)
-    function writeQuestion(string memory _question, bool _yesno) public onlyOwner {
+    function writeQuestion(string memory _question, bool _yesno) public {
         require(bytes(question.description).length == 0, "Il faut d'abord recommencer le questionnaire.");
         require (bytes(_question).length != 0, "le champ est vide");
         question.description = _question;

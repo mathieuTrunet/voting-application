@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import Voting from "./artifacts/contracts/Voting.sol/Voting.json";
 import getWeb3 from "./getWeb3";
-import MenuAppBar from "./components/navigationBar.jsx";
 import AdministrationPage from "./pages/administrationPage.jsx";
 import UserPage from "./pages/UserPage/userPage.jsx";
 
@@ -22,14 +21,13 @@ class App extends Component {
             // Use web3 to get the user's accounts.
             /* on récupère le tableau des comptes sur le metamask du user */
             const accounts = await web3.eth.getAccounts()
-            console.log("accounts",accounts)
 
 
 
             /* Création de l'objet de contrat avec l'abi et l'addresse du contrat  */
             const instance = new web3.eth.Contract(
                 Voting.abi,
-                "0x6b311Aacf51BD77001d7ED47628a73Db89D10711"
+                "0x123bbf30f4a8ca80d072352189adab58dbb44502"
             )
 
             // Set web3, accounts, and contract to the state, and then proceed with an
@@ -48,8 +46,6 @@ class App extends Component {
                     isOwner: true,
                 })
             }
-
-            console.log(this.state);
 
         } catch (error) {
             // Catch any errors for any of the above operations.

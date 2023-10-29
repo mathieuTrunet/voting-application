@@ -8,6 +8,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import {useEffect, useState} from "react";
 
 import PropositionList from "./propositionList";
+import Voting from "../artifacts/contracts/Voting.sol/Voting.json";
 
 const data = ["banane", "pomme", "orange", "boudin noir"];
 
@@ -28,8 +29,29 @@ export default function QuestionManagement(Props) {
 
 function QuestionInput(Props) {
 
-    function handleWriteQuestion(){
-        Props.contract.contract._methods.writeQuestion("coucou").call();
+    const [question, setQuestion] = useState();
+    async function handleWriteQuestion(){
+        // const instance =  new Props.contract.web3.eth.Contract(
+        //     Voting.abi,
+        //     Props.contract.contract._address
+        // );
+        // console.log(instance);
+        //
+        // let gasEstimate = await Props.contract.contract._methods.writeQuestion(question, true).estimateGas({from : Props.contract.accounts[0]})
+        //
+        // let encode = await Props.contract.contract._methods.writeQuestion(question, true).encodeABI();
+        //
+        // let tx = await Props.contract.web3.eth.sendTransaction({
+        //     from: Props.contract.accounts[0],
+        //     to: Props.contract.contract._address,
+        //     gas: gasEstimate,
+        //     data: encode,
+        // });
+
+        console.log(Props.contract.contract)
+    const toto =  await Props.contract.contract._methods.getQuestion().call();
+    console.log(toto);
+
     }
 
   return (
@@ -42,6 +64,7 @@ function QuestionInput(Props) {
         disabled={Props.phase === "input" ? false : true}
         sx={{ width: 650 }}
         label="saisir une question"
+        onChange={(e) => setQuestion(e.target.value)}
       />
         <Button
             sx={ButtonPhaseStyle}

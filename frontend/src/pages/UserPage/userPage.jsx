@@ -1,9 +1,9 @@
 import NavigationBar from "../../components/navigationBar.jsx";
 import BasicTabs from "../../components/Tabs.jsx";
+export default function UserPage(props) {
 
-export default function UserPage() {
     return <>
         <NavigationBar></NavigationBar>
-        <BasicTabs></BasicTabs>
+        <BasicTabs contract={props.contract}></BasicTabs>
     </>;
 }
