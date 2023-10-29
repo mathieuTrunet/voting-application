@@ -11,8 +11,6 @@ import PropositionList from "./propositionList";
 import Voting from "../artifacts/contracts/Voting.sol/Voting.json";
 
 export default function QuestionManagement(Props) {
-    const [phase, setPhase] = useState("input");
-    const [isBooleanQuestion, setIsBooleanQuestion] = useState(false);
 
     const [question, setQuestion] = useState();
 
@@ -28,11 +26,11 @@ export default function QuestionManagement(Props) {
 
     return (
         <>
-            <QuestionInput phase={phase} contract={Props.contract}/>
+            <QuestionInput contract={Props.contract}/>
             {question?.length > 0 ?
                 <>
                     <PropositionList contract={Props.contract}/>
-                    <ButtonPhaseSection phase={phase} contract={Props.contract}/>
+                    <ButtonPhaseSection contract={Props.contract}/>
                 </>
                 : <></>}
         </>
@@ -41,17 +39,19 @@ export default function QuestionManagement(Props) {
 
 function QuestionInput(Props) {
 
+    const [questionFromContract, setQuestionFromContract] = useState();
     const [question, setQuestion] = useState();
-
+    const [switchState, setSwitchState] = useState(false);
+    let hide = false;
     async function handleWriteQuestion() {
         const instance = new Props.contract.web3.eth.Contract(
             Voting.abi,
             Props.contract.contract._address
         );
 
-        let gasEstimate = await Props.contract.contract._methods.writeQuestion(question, true).estimateGas({from: Props.contract.accounts[0]})
+        let gasEstimate = await Props.contract.contract._methods.writeQuestion(question, switchState).estimateGas({from: Props.contract.accounts[0]})
 
-        let encode = await Props.contract.contract._methods.writeQuestion(question, true).encodeABI();
+        let encode = await Props.contract.contract._methods.writeQuestion(question, switchState).encodeABI();
 
         let tx = await Props.contract.web3.eth.sendTransaction({
             from: Props.contract.accounts[0],
@@ -59,27 +59,32 @@ function QuestionInput(Props) {
             gas: gasEstimate,
             data: encode,
         });
+
+        hide = true;
     }
 
     async function getCurrentQuestion() {
         const question = await Props.contract.contract._methods.getQuestion().call();
         setQuestion(question);
+        setQuestionFromContract(question);
     }
 
     useEffect(() => {
+        if (question?.length === 0) {
+            hide = false;
+        }
         getCurrentQuestion();
     }, [])
 
-    if (question?.length === 0) {
+    if (!questionFromContract) {
         return (
             <>
                 <Box sx={BoxSwitchStyle}>
                     <Typography>question à réponse de type oui/non</Typography>
-                    <Switch disabled={Props.phase === "input" ? false : true}/>
+                    <Switch onChange={() => setSwitchState(prevState => !prevState)}/>
                 </Box>
 
                 <TextField
-                    disabled={Props.phase === "input" ? false : true}
                     sx={{width: 650}}
                     label="saisir une question"
                     onChange={(e) => setQuestion(e.target.value)}
@@ -154,7 +159,6 @@ function ButtonPhaseSection(Props) {
 
     useEffect(() => {
         getCurrentState();
-        handleQuestionState();
     }, [])
 
 
@@ -178,6 +182,7 @@ function ButtonPhaseSection(Props) {
                     color={Props.phase === "input" ? "inherit" : Props.phase === "validation" ? "info" : "success"}
                     startIcon={Props.phase === "vote" && <CheckIcon/>}
                     disabled={currentQuestionState === "etape 2 : Ecrivez les propositions" ? false : true}
+                    onClick={handleQuestionState}
                 >
                     vote
                 </Button>
@@ -186,6 +191,7 @@ function ButtonPhaseSection(Props) {
                     variant="contained"
                     color={Props.phase === "vote" ? "info" : "inherit"}
                     disabled={currentQuestionState === "etape 3 : Entrez les votes" ? false : true}
+                    onClick={handleQuestionState}
                 >
                     cloture
                 </Button>
